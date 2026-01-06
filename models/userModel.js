@@ -5,8 +5,9 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
-    validator: {
-      validate: [validator.isEmail, "Please provide a valid email"],
+    validate: {
+      validator: (v) => validator.isEmail(v),
+      message: "Please provide a valid email",
     },
     required: [true, "Please provide your email"],
   },
@@ -17,12 +18,11 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: [true, "Please provide your password"] },
   passwordConfirm: {
     type: String,
-    validator: {
-      validate: {
-        function(val) {
-          return val === this.password;
-        },
+    validate: {
+      validator: function (val) {
+        return val === this.password;
       },
+      message: "Passwords are not the same",
     },
     required: [true, "Please confirm your password"],
   },

@@ -1,75 +1,53 @@
 import Watchlist from "../models/watchlistModel.js";
 import AppError from "../utils/AppError.js";
+import catchAsync from "../utils/catchAsync.js";
 
-export async function getAllWatchlists(req, res, next) {
-  try {
-    const watchlists = await Watchlist.find();
-    res
-      .status(200)
-      .json({ status: "success", length: watchlists.length, data: watchlists });
-  } catch (err) {
-    console.log(err);
-  }
-}
+export const getAllWatchlists = catchAsync(async (req, res, next) => {
+  const watchlists = await Watchlist.find();
+  res
+    .status(200)
+    .json({ status: "success", length: watchlists.length, data: watchlists });
+});
 
-export async function getWatchlist(req, res, next) {
-  try {
-    const { watchlistId } = req.params;
-    const [watchlist] = await Watchlist.find({ _id: watchlistId }).select(
-      "-userId -movies._id"
-    );
-    res.status(200).json({ status: "success", data: watchlist });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
-  }
-}
+export const getWatchlist = catchAsync(async (req, res, next) => {
+  const { watchlistId } = req.params;
+  const [watchlist] = await Watchlist.find({ _id: watchlistId }).select(
+    "-userId -movies._id"
+  );
+  res.status(200).json({ status: "success", data: watchlist });
+});
 
-export async function getAllWatchlistsForUser(req, res, next) {
-  try {
-    const userId = "user001";
-    const watchlists = await Watchlist.find({ userId }).select("-movies");
-    res
-      .status(200)
-      .json({ status: "success", length: watchlists.length, data: watchlists });
-  } catch (err) {
-    next(new AppError(`${err.message}`, 400));
-  }
-}
+export const getAllWatchlistsForUser = catchAsync(async (req, res, next) => {
+  const userId = "user001";
+  const watchlists = await Watchlist.find({ userId }).select("-movies");
 
-export async function createWatchlist(req, res, next) {
-  try {
-    const { userId, name, description } = req.body;
-    const newWatchlist = await Watchlist.create({ userId, name, description });
-    res.status(201).json({ status: "success", data: newWatchlist });
-  } catch (err) {
-    next(new AppError(`${err.message}`, 400));
-  }
-}
+  res
+    .status(200)
+    .json({ status: "success", length: watchlists.length, data: watchlists });
+});
 
-export async function addMovieToWatchlist(req, res, next) {
-  try {
-    const watchlistId = req.params.watchlistId;
-    const { apiId, name, description, score, image } = req.body;
-    const watchlist = await Watchlist.findOneAndUpdate(
-      { _id: watchlistId },
-      { $addToSet: { movies: { apiId, name, description, score, image } } }
-    );
-    res.status(200).json({ status: "success", data: watchlist });
-  } catch (err) {
-    next(new AppError(`${err.message}`, 400));
-  }
-}
+export const createWatchlist = catchAsync(async (req, res, next) => {
+  const { userId, name, description } = req.body;
+  const newWatchlist = await Watchlist.create({ userId, name, description });
+  res.status(201).json({ status: "success", data: newWatchlist });
+});
 
-export async function deleteMovieFromWatchlist(req, res, next) {
-  try {
-    const { watchlistId, movieId } = req.params;
-    await Watchlist.findOneAndUpdate(
-      { _id: watchlistId },
-      { $pull: { movies: { _id: movieId } } }
-    );
+export const addMovieToWatchlist = catchAsync(async (req, res, next) => {
+  const watchlistId = req.params.watchlistId;
+  const { apiId, name, description, score, image } = req.body;
+  const watchlist = await Watchlist.findOneAndUpdate(
+    { _id: watchlistId },
+    { $addToSet: { movies: { apiId, name, description, score, image } } }
+  );
+  res.status(200).json({ status: "success", data: watchlist });
+});
 
-    res.status(204).json({ status: "success" });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err.message });
-  }
-}
+export const deleteMovieFromWatchlist = catchAsync(async (req, res, next) => {
+  const { watchlistId, movieId } = req.params;
+  await Watchlist.findOneAndUpdate(
+    { _id: watchlistId },
+    { $pull: { movies: { _id: movieId } } }
+  );
+
+  res.status(204).json({ status: "success" });
+});

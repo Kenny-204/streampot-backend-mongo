@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide your name"],
   },
-  password: { type: String, required: [true, "Please provide your password"] },
+  password: {
+    type: String,
+    required: [true, "Please provide your password"],
+    select: false,
+  },
   passwordConfirm: {
     type: String,
     validate: {
@@ -31,7 +35,12 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+    select: false,
   },
+});
+
+userSchema.pre("/^find/", function () {
+  this.select("-__v ");
 });
 
 userSchema.pre("save", async function () {

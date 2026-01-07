@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
-import {promisify} from 'util';
+import { promisify } from "util";
 
 function signToken(id) {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -36,7 +36,7 @@ export const protect = catchAsync(async (req, res, next) => {
     );
 
   req.user = currentUser;
-  console.log(currentUser)
+  console.log(currentUser);
   next();
 });
 
@@ -46,7 +46,7 @@ export const signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-  });
+  })
 
   const token = signToken(newUser._id);
 

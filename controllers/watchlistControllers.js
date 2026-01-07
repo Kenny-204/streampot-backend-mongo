@@ -27,7 +27,8 @@ export const getAllWatchlistsForUser = catchAsync(async (req, res, next) => {
 });
 
 export const createWatchlist = catchAsync(async (req, res, next) => {
-  const { userId, name, description } = req.body;
+  const userId = req.user._id
+  const {  name, description } = req.body;
   const newWatchlist = await Watchlist.create({ userId, name, description });
   res.status(201).json({ status: "success", data: newWatchlist });
 });

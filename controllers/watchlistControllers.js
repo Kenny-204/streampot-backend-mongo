@@ -18,7 +18,7 @@ export const getWatchlist = catchAsync(async (req, res, next) => {
 });
 
 export const getAllWatchlistsForUser = catchAsync(async (req, res, next) => {
-  const userId = "user001";
+  const userId = req.user._id
   const watchlists = await Watchlist.find({ userId }).select("-movies");
 
   res

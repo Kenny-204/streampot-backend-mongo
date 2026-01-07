@@ -6,8 +6,6 @@ import globalErrorHandler from "./controllers/errorController.js";
 import AppError from "./utils/AppError.js";
 const app = express();
 
-app.use(express.json());
-
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -15,13 +13,15 @@ app.use(
   })
 );
 
+app.use(express.json());
+
+
 app.use("/api/v2/watchlists/", watchlistRouter);
 app.use("/api/v2/users", userRouter);
 
 app.use("/{*any}", function (req, res, next) {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
-app.u
 app.use(globalErrorHandler);
 
 export default app;

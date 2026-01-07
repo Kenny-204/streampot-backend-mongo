@@ -36,7 +36,6 @@ export const protect = catchAsync(async (req, res, next) => {
     );
 
   req.user = currentUser;
-  console.log(currentUser);
   next();
 });
 
@@ -46,7 +45,7 @@ export const signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-  })
+  });
 
   const token = signToken(newUser._id);
 

@@ -1,14 +1,31 @@
 import mongoose from "mongoose";
-
+// description: "Cast out from his clan, a young Predator finds an unlikely ally in a damaged android and embarks on a treacherous journey in search of the ultimate adversary."
+// ​
+// genre: Array(3) [ "Action", "Science Fiction", "Adventure" ]
+// ​
+// imdbId: "tt31227572"
+// ​
+// poster: "/pHpq9yNUIo6aDoCXEBzjSolywgz.jpg"
+// ​
+// runtime: 107
+// ​
+// score: 76
+// ​
+// title: "Predator: Badlands"
+// ​
+// year: "2025"
 const movieSchema = new mongoose.Schema({
-  apiId: {
+  imdbId: {
     type: String,
     required: [true, "A movie must have an api id"],
   },
-  name: { type: String, required: [true, "A movie must have a name"] },
+  title: { type: String, required: [true, "A movie must have a name"] },
   description: String,
   score: Number,
-  image: String,
+  poster: String,
+  runtime: Number,
+  year: String,
+  id: String,
   addedAt: { type: Date, default: Date.now() },
 });
 

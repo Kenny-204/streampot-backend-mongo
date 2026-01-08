@@ -18,7 +18,7 @@ export const getWatchlist = catchAsync(async (req, res, next) => {
 });
 
 export const getAllWatchlistsForUser = catchAsync(async (req, res, next) => {
-  const userId = req.user._id
+  const userId = req.user._id;
   const watchlists = await Watchlist.find({ userId }).select("-movies");
 
   res
@@ -27,18 +27,19 @@ export const getAllWatchlistsForUser = catchAsync(async (req, res, next) => {
 });
 
 export const createWatchlist = catchAsync(async (req, res, next) => {
-  const userId = req.user._id
-  const {  name, description } = req.body;
+  const userId = req.user._id;
+  const { name, description } = req.body;
   const newWatchlist = await Watchlist.create({ userId, name, description });
   res.status(201).json({ status: "success", data: newWatchlist });
 });
 
+
 export const addMovieToWatchlist = catchAsync(async (req, res, next) => {
   const watchlistId = req.params.watchlistId;
-  const { apiId, name, description, score, image } = req.body;
+  const { imdbId, title, description, id,score, poster, runtime, year } = req.body;
   const watchlist = await Watchlist.findOneAndUpdate(
     { _id: watchlistId },
-    { $addToSet: { movies: { apiId, name, description, score, image } } }
+    { $addToSet: { movies: { imdbId,id, title, description, score, poster, runtime, year } } }
   );
   res.status(200).json({ status: "success", data: watchlist });
 });

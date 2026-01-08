@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://streampot-frontend.onrender.com/",
+    origin: "https://streampot-frontend.onrender.com",
     credentials: true,
   })
 );
